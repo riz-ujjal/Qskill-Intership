@@ -1,38 +1,39 @@
 import requests
-from pydantic import BaseModel
-from fastapi import FastAPI
 
-# For getting the latitude and longitude.
-send_url = "http://api.ipstack.com/check?access_key=dad5401b4a4b79cbdce4041b0139e65f"
-geo_req = requests.get(send_url)
-geo_json = json.loads(geo_req.text)
-latitude = geo_json['latitude']
-longitude = geo_json['longitude']
-city = geo_json['city']
-print("lati: " , latitude)
-print("longi: ", longitude)
-print("city: ", city)
-app =FastAPI()
-class weather(BaseModel):
-    temprature : int
-    city :str
+def get_weather():
+    
+    try:
+        ip_response = requests.get('https://ipinfo.io/json')
+        ip_data = ip_response.json()
+        
+        # ipinfo returns location as a string "lat,lon"
+        lat, lon = ip_data['loc'].split(',')
+        city = ip_data['city']
+        # print(f"Location found: {city} (Lat: {lat}, Lon: {lon})")
+        
+    except Exception as e:
+        print("Could not detect location. Please check your internet connection.")
+        return
+    
+    API_KEY = "c72c37b4c8ce68127db5e35219eb6713"
+    weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
 
-@app.get("/temp/")
-def get_temp ():
-    url = "https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=&units=metric"
-    response =requests.get(url)
-    data = response.json()
-    temperature = ["current_temperature"]["temperature"]
-    return f"{temperature}" 
+    try:
+        weather_response = requests.get(weather_url)
 
-import json
+        if weather_response.status_code == 200:
+            weather_data = weather_response.json()
+            
+            temp = weather_data['main']['temp']
+            description = weather_data['weather'][0]['description']
+            
+            return (f"Today's Temperature is {temp}°C")
+            
+        else:
+            return (f"Error fetching weather: {weather_response.json().get('message')}")
+            
+    except Exception as e:
+        return ("Could not connect to the weather service.")
 
-send_url = "http://api.ipstack.com/check?access_key=dad5401b4a4b79cbdce4041b0139e65f"
-geo_req = requests.get(send_url)
-geo_json = json.loads(geo_req.text)
-latitude = geo_json['latitude']
-longitude = geo_json['longitude']
-city = geo_json['city']
-print("lati: " , latitude)
-print("longi: ", longitude)
-print("city: ", city)
+if __name__ == "__main__":
+    get_weather()
