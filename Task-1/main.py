@@ -1,6 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 import pyaudio
+from Weather import get_weather_app
 
 def listen():
     recognizer = sr.Recognizer()
@@ -22,4 +23,5 @@ while True :
         break
     elif "Hello" in command.lower():
         speak("Hello Ueser")
+get_weather_app()
 
