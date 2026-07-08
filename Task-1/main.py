@@ -2,7 +2,7 @@ import pyttsx3
 import speech_recognition as sr
 import pyaudio
 from Weather import get_weather
-
+from News_Reader import News_Reading
 def listen():
     recognizer = sr.Recognizer()
     with sr.Microphone(device_index=2) as source:
@@ -29,6 +29,10 @@ while True :
         speak("Let me check the temperature for today...")
         speak("searching for your location...")
         speak(get_weather())
+    
+    elif "news" in command.lower():
+        speak("Here are top two news for today!")
+        speak(News_Reading())
     
         
 
