@@ -4,16 +4,15 @@ news_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=e36536bdfe1b4
 def News_Reading():
     news_response = requests.get(news_url)
     news_data = news_response.json()
-    print(news_data)
     articles_list = news_data["articles"]
-
+    display_articles =""
     if news_data["totalResults"] == 0:
         return "I'm sorry, I couldn't find any news headlines right now."
     
-    else :
-        for single_articles in articles_list :
-            headline = single_articles["title"]
-            return headline
-    
-
+        
+    for single_articles in articles_list[:2] :
+        headline = single_articles["title"]
+        display_articles += headline + "\n"
+    return display_articles
+        
 News_Reading()
