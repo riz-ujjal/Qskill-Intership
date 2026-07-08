@@ -23,10 +23,7 @@ def get_weather():
 
         if weather_response.status_code == 200:
             weather_data = weather_response.json()
-            
             temp = weather_data['main']['temp']
-            description = weather_data['weather'][0]['description']
-            
             return (f"Today's Temperature is {temp}°C")
             
         else:
