@@ -2,7 +2,7 @@ from Weather import get_weather
 from News_Reader import News_Reading
 from Listening_to_user import Listen
 from Speaking_to_user import Speak
-from Task_setting import Task
+from Task_setting import Add_task
 
 while True :
     command = Listen()
@@ -25,6 +25,13 @@ while True :
         Speak("Here are top two news for today!")
         Speak(News_Reading())
         break   
+
+    elif "add" in command:
+        recived_task = Add_task(command)
+        Speak(recived_task)
+       
+
+        
     
 
     
