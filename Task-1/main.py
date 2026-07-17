@@ -3,6 +3,7 @@ from News_Reader import News_Reading
 from Listening_to_user import Listen
 from Speaking_to_user import Speak
 from Task_setting import Add_task
+from Remainder import Clock_watcher
 
 while True :
     command = Listen()
@@ -30,6 +31,12 @@ while True :
         recived_task = Add_task(command)
         Speak(recived_task)
        
+    elif "task" in command:
+        Speak("I am online and ready.")
+        print("Listening...")
+        response = Clock_watcher()
+        if response != "":
+            Speak(response)
 
         
     
